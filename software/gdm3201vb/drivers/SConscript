@@ -1,0 +1,34 @@
+Import('RTT_ROOT')
+Import('rtconfig')
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+
+src = Split("""
+board.c
+led.c
+stm32f10x_it.c
+""")
+
+# add USART driver.
+if GetDepend('RT_USING_SERIAL') == True:
+	src += ['drv_usart.c']
+
+# add SPI driver.
+if GetDepend('RT_USING_SPI') == True:
+	src += ['drv_spi.c']
+
+# add I2C driver.
+if GetDepend('RT_USING_I2C') == True:
+	src += ['stm32_i2c.c']
+
+# add RTC driver.
+if GetDepend('RT_USING_RTC') == True:
+	src+= ['drv_rtc.c']
+
+CPPPATH = [cwd]
+
+group = DefineGroup('drivers', src, depend = [''], CPPPATH = CPPPATH)
+
+Return('group')
