@@ -120,9 +120,13 @@ int rt_application_init(void)
 
     /* init led thread */
     result = rt_thread_init(&led_thread,
-        "led",
-        led_thread_entry, RT_NULL,
-        (rt_uint8_t *)&led_stack[0], sizeof(led_stack), 20, 5);
+                            "led",
+                            led_thread_entry,
+                            RT_NULL,
+                            (rt_uint8_t*)&led_stack[0],
+                            sizeof(led_stack),
+                            20,
+                            5);
     if (result == RT_EOK)
     {
         rt_thread_startup(&led_thread);
@@ -130,17 +134,17 @@ int rt_application_init(void)
 
 #if (RT_THREAD_PRIORITY_MAX == 32)
     init_thread = rt_thread_create("init",
-                                rt_init_thread_entry, RT_NULL,
-                                2048, 8, 20);
+                                   rt_init_thread_entry, RT_NULL,
+                                   2048, 8, 20);
 #else
     init_thread = rt_thread_create("init",
-                                rt_init_thread_entry, RT_NULL,
-                                2048, 80, 20);
+                                   rt_init_thread_entry, RT_NULL,
+                                   2048, 80, 20);
 #endif
 
     if (init_thread != RT_NULL)
         rt_thread_startup(init_thread);
-    
+
     return 0;
 }
 
