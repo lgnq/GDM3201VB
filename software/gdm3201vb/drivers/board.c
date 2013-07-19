@@ -19,6 +19,11 @@
 #include "stm32f10x_fsmc.h"
 #include "board.h"
 
+
+#ifdef  RT_USING_COMPONENTS_INIT
+#include <components.h>
+#endif
+
 #ifdef RT_USING_RTC
 #include "drv_rtc.h"
 #endif
@@ -75,6 +80,10 @@ void rt_hw_board_init(void)
 
     rt_hw_usart_init();
     rt_console_set_device(CONSOLE_DEVICE);
+
+#ifdef RT_USING_COMPONENTS_INIT
+    rt_components_board_init();
+#endif
 
 #ifdef RT_USING_RTC
     rt_hw_rtc_init();

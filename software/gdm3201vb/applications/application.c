@@ -107,6 +107,10 @@ void rt_init_thread_entry(void *parameter)
     rt_components_init();
 #endif
 
+#ifdef  RT_USING_FINSH
+    finsh_set_device(RT_CONSOLE_DEVICE_NAME);
+#endif
+
 #ifdef RT_USING_SPI
         rt_hw_spi2_init();
 #endif
