@@ -26,10 +26,7 @@ static rt_err_t stm32_configure(struct rt_serial_device *serial, struct serial_c
 
     uart = (struct stm32_uart *)serial->parent.user_data;
 
-    if (cfg->baud_rate == BAUD_RATE_9600)
-        USART_InitStructure.USART_BaudRate = 9600;
-    else if (cfg->baud_rate == BAUD_RATE_115200)
-        USART_InitStructure.USART_BaudRate = 115200;
+    USART_InitStructure.USART_BaudRate = cfg->baud_rate;
 
     if (cfg->data_bits == DATA_BITS_8)
         USART_InitStructure.USART_WordLength = USART_WordLength_8b;
@@ -374,8 +371,8 @@ static void NVIC_Configuration(struct stm32_uart *uart)
 
 void rt_hw_usart_init(void)
 {
-    struct stm32_uart *uart;
-    struct serial_configure config;
+    struct stm32_uart* uart;
+    struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
 
     RCC_Configuration();
     GPIO_Configuration();
