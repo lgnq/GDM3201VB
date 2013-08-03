@@ -18,7 +18,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_fsmc.h"
 #include "board.h"
-
+#include "drv_lcd.h"
 
 #ifdef  RT_USING_COMPONENTS_INIT
 #include <components.h>
@@ -88,6 +88,8 @@ void rt_hw_board_init(void)
 #ifdef RT_USING_RTC
     rt_hw_rtc_init();
 #endif
+	
+    LCD_SSD1289_Init();	
 }
 
 /*@}*/

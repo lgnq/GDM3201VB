@@ -8,6 +8,7 @@ cwd = GetCurrentDir()
 src = Split("""
 board.c
 led.c
+drv_lcd.c
 stm32f10x_it.c
 """)
 
