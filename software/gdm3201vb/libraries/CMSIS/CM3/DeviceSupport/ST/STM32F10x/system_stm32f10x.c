@@ -113,6 +113,8 @@
 /* #define SYSCLK_FREQ_48MHz  48000000 */
 /* #define SYSCLK_FREQ_56MHz  56000000 */
 /* #define SYSCLK_FREQ_72MHz  72000000 */
+/* #define SYSCLK_FREQ_96MHz 96000000 */
+/* #define SYSCLK_FREQ_104MHz 104000000 */
 #define SYSCLK_FREQ_108MHz 108000000
 #endif
 
@@ -161,8 +163,12 @@
   uint32_t SystemCoreClock         = SYSCLK_FREQ_56MHz;        /*!< System Clock Frequency (Core Clock) */
 #elif defined SYSCLK_FREQ_72MHz
   uint32_t SystemCoreClock         = SYSCLK_FREQ_72MHz;        /*!< System Clock Frequency (Core Clock) */
+#elif defined SYSCLK_FREQ_96MHz
+  uint32_t SystemCoreClock         = SYSCLK_FREQ_96MHz;        /*!< System Clock Frequency (Core Clock) */
+#elif defined SYSCLK_FREQ_104MHz
+  uint32_t SystemCoreClock         = SYSCLK_FREQ_104MHz;       /*!< System Clock Frequency (Core Clock) */
 #elif defined SYSCLK_FREQ_108MHz
-  uint32_t SystemCoreClock         = SYSCLK_FREQ_108MHz;        /*!< System Clock Frequency (Core Clock) */
+  uint32_t SystemCoreClock         = SYSCLK_FREQ_108MHz;       /*!< System Clock Frequency (Core Clock) */
 #else /*!< HSI Selected as System Clock source */
   uint32_t SystemCoreClock         = HSI_VALUE;        /*!< System Clock Frequency (Core Clock) */
 #endif
@@ -190,6 +196,10 @@ static void SetSysClock(void);
   static void SetSysClockTo56(void);  
 #elif defined SYSCLK_FREQ_72MHz
   static void SetSysClockTo72(void);
+#elif defined SYSCLK_FREQ_96MHz
+  static void SetSysClockTo96(void);
+#elif defined SYSCLK_FREQ_104MHz
+  static void SetSysClockTo104(void);
 #elif defined SYSCLK_FREQ_108MHz
   static void SetSysClockTo108(void);
 #endif
@@ -435,6 +445,10 @@ static void SetSysClock(void)
   SetSysClockTo56();  
 #elif defined SYSCLK_FREQ_72MHz
   SetSysClockTo72();
+#elif defined SYSCLK_FREQ_96MHz
+  SetSysClockTo96();	
+#elif defined SYSCLK_FREQ_104MHz
+  SetSysClockTo104();	
 #elif defined SYSCLK_FREQ_108MHz
   SetSysClockTo108();	
 #endif
@@ -1084,6 +1098,130 @@ static void SetSysClockTo72(void)
   { /* If HSE fails to start-up, the application will have wrong clock 
          configuration. User can add here some code to deal with this error */
   }
+}
+#elif defined SYSCLK_FREQ_96MHz
+static void SetSysClockTo96(void)
+{
+  __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
+ 
+  /* SYSCLK, HCLK, PCLK2 and PCLK1 configuration ---------------------------*/   
+  /* Enable HSE */   
+  RCC->CR |= ((uint32_t)RCC_CR_HSEON);
+ 
+  /* Wait till HSE is ready and if Time out is reached exit */
+  do
+  {
+    HSEStatus = RCC->CR & RCC_CR_HSERDY;
+    StartUpCounter++; 
+  } while ((HSEStatus == 0) && (StartUpCounter != HSE_STARTUP_TIMEOUT));
+
+  if ((RCC->CR & RCC_CR_HSERDY) != RESET)
+  {
+    HSEStatus = (uint32_t)0x01;
+  }
+  else
+  {
+    HSEStatus = (uint32_t)0x00;
+  } 
+
+  if (HSEStatus == (uint32_t)0x01)
+  { 
+    /* HCLK = SYSCLK */
+    RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
+     
+    /* PCLK2 = HCLK */
+    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1;
+   
+    /* PCLK1 = HCLK */
+    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2;
+  
+    /*  PLL configuration: PLLCLK = HSE * 12 = 96 MHz */
+    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMULL));
+    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL12);
+
+    /* Enable PLL */
+    RCC->CR |= RCC_CR_PLLON;
+
+    /* Wait till PLL is ready */
+    while ((RCC->CR & RCC_CR_PLLRDY) == 0)
+    {
+    }
+   
+    /* Select PLL as system clock source */
+    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+    RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;   
+
+    /* Wait till PLL is used as system clock source */
+    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08)
+    {
+    }
+  }
+  else
+  { /* If HSE fails to start-up, the application will have wrong clock
+         configuration. User can add here some code to deal with this error */
+  }	
+}
+#elif defined SYSCLK_FREQ_104MHz
+static void SetSysClockTo104(void)
+{
+  __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
+ 
+  /* SYSCLK, HCLK, PCLK2 and PCLK1 configuration ---------------------------*/   
+  /* Enable HSE */   
+  RCC->CR |= ((uint32_t)RCC_CR_HSEON);
+ 
+  /* Wait till HSE is ready and if Time out is reached exit */
+  do
+  {
+    HSEStatus = RCC->CR & RCC_CR_HSERDY;
+    StartUpCounter++; 
+  } while ((HSEStatus == 0) && (StartUpCounter != HSE_STARTUP_TIMEOUT));
+
+  if ((RCC->CR & RCC_CR_HSERDY) != RESET)
+  {
+    HSEStatus = (uint32_t)0x01;
+  }
+  else
+  {
+    HSEStatus = (uint32_t)0x00;
+  } 
+
+  if (HSEStatus == (uint32_t)0x01)
+  { 
+    /* HCLK = SYSCLK */
+    RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
+     
+    /* PCLK2 = HCLK */
+    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1;
+   
+    /* PCLK1 = HCLK */
+    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2;
+  
+    /*  PLL configuration: PLLCLK = HSE * 13 = 104 MHz */
+    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMULL));
+    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL13);
+
+    /* Enable PLL */
+    RCC->CR |= RCC_CR_PLLON;
+
+    /* Wait till PLL is ready */
+    while ((RCC->CR & RCC_CR_PLLRDY) == 0)
+    {
+    }
+   
+    /* Select PLL as system clock source */
+    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+    RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;   
+
+    /* Wait till PLL is used as system clock source */
+    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08)
+    {
+    }
+  }
+  else
+  { /* If HSE fails to start-up, the application will have wrong clock
+         configuration. User can add here some code to deal with this error */
+  }	
 }
 #elif defined SYSCLK_FREQ_108MHz
 static void SetSysClockTo108(void)
