@@ -935,7 +935,11 @@ void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks)
       pllsource = RCC->CFGR & CFGR_PLLSRC_Mask;
       
 #ifndef STM32F10X_CL      
-      pllmull = ( pllmull >> 18) + 2;
+      // GD32F103 eamon.fang
+      if (RCC->CFGR & 0x08000000)
+        pllmull = ( pllmull >> 18) + 2 + 15;
+      else
+        pllmull = ( pllmull >> 18) + 2;
       
       if (pllsource == 0x00)
       {/* HSI oscillator clock divided by 2 selected as PLL clock entry */
