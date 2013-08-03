@@ -27,3 +27,6 @@ project.uvopt
 project.uvgui.*
 project.eww
 project.ewp
+
+JLinkLog.txt
+JLinkSettings.ini
