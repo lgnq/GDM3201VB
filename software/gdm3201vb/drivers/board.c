@@ -89,7 +89,7 @@ void rt_hw_board_init(void)
     rt_hw_rtc_init();
 #endif
 	
-    LCD_SSD1289_Init();	
+    rt_hw_lcd_init();	
 }
 
 /*@}*/

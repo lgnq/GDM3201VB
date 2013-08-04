@@ -1,7 +1,8 @@
-#ifndef __LCD_H__
-#define __LCD_H__
+#ifndef __DRV_LCD_H__
+#define __DRV_LCD_H__
 
 #include "stm32f10x.h"
+
 //颜色的宏定义
 #define White          0xFFFF
 #define Black          0x0000
@@ -43,12 +44,13 @@ void LCD_SSD1289_DrawBMP(u16 x,u16 y,u16 Width,u16 Height,const u8 *pBMP);
 void LCD_SSD1289_DrawBMP_GUIBit(u16 x,u16 y,u16 Width,u16 Height,const u16 *pBMP);
 void LCD_SSD1289_CLEAR(u16 x,u16 y,u16 len,u16 wid,u16 Color);
 void LCD_SSD1289_FullScreen(u16 Color);
-void LCD_SSD1289_Init(void);
+void rt_hw_lcd_init(void);
 
 void LCD_SSD1289_XorPixel(int x, int y,u16 Color);
 void LCD_SSD1289_DrawPoint(u16 x,u16 y,u16 Color);
 void LCD_SSD1289_DrawHLine(u16 x,u16 y,u16 x1,u16 Color);
 void LCD_SSD1289_DrawVLine(u16 x,u16 y,u16 y1,u16 Color);
 unsigned short LCD_SSD1289_GetPointRGB(unsigned short Xpos,unsigned short Ypos);
-#endif /* __LCD_H */
+
+#endif
 
