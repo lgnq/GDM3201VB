@@ -112,7 +112,7 @@ void rt_init_thread_entry(void *parameter)
 #endif
 
 #ifdef RT_USING_SPI
-        rt_hw_spi2_init();
+    rt_hw_spi2_init();
 #endif
 }
 

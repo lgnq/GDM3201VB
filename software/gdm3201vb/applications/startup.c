@@ -19,12 +19,12 @@
 #include "board.h"
 
 /**
- * @addtogroup STM32
+ * @addtogroup GD32
  */
 
 /*@{*/
 
-extern int  rt_application_init(void);
+extern int rt_application_init(void);
 
 #ifdef __CC_ARM
 extern int Image$$RW_IRAM1$$ZI$$Limit;
@@ -36,7 +36,6 @@ extern int Image$$RW_IRAM1$$ZI$$Limit;
 extern int __bss_end;
 #define STM32_SRAM_BEGIN    (&__bss_end)
 #endif
-
 
 /*******************************************************************************
 * Function Name  : assert_failed
