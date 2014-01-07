@@ -68,7 +68,7 @@ void rt_hw_timer_handler(void)
 }
 
 /**
- * This function will initial STM32 board.
+ * This function will initial GD32 board.
  */
 void rt_hw_board_init(void)
 {

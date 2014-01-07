@@ -737,10 +737,10 @@ void LCD_SSD1289_DrawBMP(u16 x, u16 y, u16 Width, u16 Height, const u8 *pBMP)
 ********************************************************************************/
 void H_V_Type(u8 Type)
 {
-  if(!Type)
-    LCD_SSD1289_WR_CMD(0x0011,0x6070); //设定为竖屏模式
+  if (!Type)
+    LCD_SSD1289_WR_CMD(0x0011, 0x6070); //设定为竖屏模式
   else
-    LCD_SSD1289_WR_CMD(0x0011,0x6058); //设定为横屏模式
+    LCD_SSD1289_WR_CMD(0x0011, 0x6058); //设定为横屏模式
 }
 
 void rt_hw_lcd_init(void)
@@ -760,12 +760,14 @@ void rt_hw_lcd_init(void)
   LCD_SSD1289_WR_CMD(0x0001,0x2B3F);    Delay(50);   //驱动输出控制320*240  0x6B3F  293f  2b3f 6b3f
   LCD_SSD1289_WR_CMD(0x0002,0x0600);    Delay(50);
   LCD_SSD1289_WR_CMD(0x0010,0x0000);    Delay(50);
+
 #if Vertical  
   H_V_Type(1);   //  LCD_WR_CMD(0x0011,0x6070);//0x4030 //定义数据格式  16位色  横屏 0x6058	 6078
 #else
   H_V_Type(0);  
 #endif
-	Delay(50);
+
+  Delay(50);
   LCD_SSD1289_WR_CMD(0x0005,0x0000);    Delay(50);
   LCD_SSD1289_WR_CMD(0x0006,0x0000);    Delay(50);
   LCD_SSD1289_WR_CMD(0x0016,0xEF1C);    Delay(50);
