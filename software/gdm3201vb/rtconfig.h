@@ -85,7 +85,7 @@
 // </section>
 
 // <section name="RT_USING_COMPONENTS_INIT" description="Using components init" default="true" >
-#define RT_USING_COMPONENTS_INIT
+// #define RT_USING_COMPONENTS_INIT
 // </section>
 
 /* SECTION: finsh, a C-Express shell */
