@@ -19,6 +19,7 @@
 #include "stm32f10x_fsmc.h"
 #include "board.h"
 #include "drv_lcd.h"
+#include "eeprom.h"
 
 #ifdef  RT_USING_COMPONENTS_INIT
 #include <components.h>
@@ -29,7 +30,7 @@
 #endif
 
 /**
- * @addtogroup STM32
+ * @addtogroup GD32F10x
  */
 
 /*@{*/
@@ -54,7 +55,6 @@ void NVIC_Configuration(void)
 
 /**
  * This is the timer interrupt service routine.
- *
  */
 void rt_hw_timer_handler(void)
 {
@@ -78,6 +78,12 @@ void rt_hw_board_init(void)
     /* Configure the SysTick */
     SysTick_Config(SystemCoreClock / RT_TICK_PER_SECOND);
 
+    /* Unlock the Flash Program Erase controller */
+    FLASH_Unlock();
+
+    /* EEPROM Init */
+    EE_Init();
+	
     rt_hw_usart_init();
     rt_console_set_device(CONSOLE_DEVICE);
 
